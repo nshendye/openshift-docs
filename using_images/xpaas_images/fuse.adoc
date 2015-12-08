@@ -65,7 +65,7 @@ The Maven Archetype catalog has is pre-built with following examples:
 
 You can select the the example that can best serve your purpose to create an application. 
 
-==== Simple Workflow to create an application from Maven Archetype Catalog: 
+==== Simple Workflow to create an application from Maven Archetype Catalog
 
 . Use Maven archetype catalog to create a sample project with the required resources. For example, following command will create a sample project: 
 +
