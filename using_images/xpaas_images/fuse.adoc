@@ -73,7 +73,7 @@ You can select the the example that can best serve your purpose to create an app
 $ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/nexus/content/repositories/ea/io/fabric8/archetypes/archetypes-catalog/2.2.0.redhat-054/archetypes-catalog-2.2.0.redhat-054-archetype-catalog.xml 
 ----
 
-. This will create a maven project with necessary dependencies. Maven properties and plugins that are used to create Docker images are added to the pom.xml. 
+. This will create a maven project with necessary dependencies. Maven properties and plugins that are used to create Docker images are added to the `*pom.xml*`. 
 
 +
 
@@ -81,7 +81,7 @@ $ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/
 +
 |=== 
 
-| dockerHost (docker.host) | Use this variable to specify the URL that your Docker Daemon is listening to. If this option is not set, DOCKER_HOST environment variable will be evaluated. If this is also not set, the plugin will use unix:///var/run/docker.sock as a default. 
+| dockerHost (docker.host) | Use this variable to specify the URL that your Docker Daemon is listening to. If this option is not set, `*DOCKER_HOST*` environment variable will be evaluated. If this is also not set, the plugin will use *`unix:///var/run/docker.sock*` as a default. 
 
 | apiVersion (docker.apiVersion) | Use this variable if you are using older version of docker not compatible with the current version.
 
@@ -89,13 +89,13 @@ $ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/
 
 | registry (docker.registry) | Use this variable to specify globally a registry to use for pulling and pushing images.
 
-| sourceDirectory (docker.source.dir) | Use this variable to specify the default directory that contains the assembly descriptors used by the plugin. The default value is src/main/docker. This option is only relevant for the docker:build goal.
+| sourceDirectory (docker.source.dir) | Use this variable to specify the default directory that contains the assembly descriptors used by the plugin. The default value is *`src/main/docker*`. This option is only relevant for the docker:build goal.
 
 | outputDirectory (docker.target.dir) | Use this variable to specify the default output directory to be used by the plugin. The default value is target/docker and is only used for the goal docker:build. 
 
 |=== 
 
-. Build and push the project to OpenShift. There are maven goals that you can used for building and pushing docker images. 
+. Build and push the project to OpenShift. You can use maven goals for building and pushing docker images. 
 
 +
 |=== 
@@ -111,7 +111,7 @@ $ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/
 |=== 
 +
 
-There are few pre-configured maven profiles that you can use to build the project. These are:
+There are few pre-configured maven profiles that you can use to build the project. These profiles are combinations of above maven goals that simplify the build process. 
 
 +
 |=== 
@@ -132,9 +132,58 @@ $ mvn -Pf8-local-deploy
 . Open OpenShift Admin console. A pod is created for the newly created application. You can view the status of this pod, deployments and services that the application is creating. 
 
 === Using Application Templates 
-Application are created through OpenShift Admin Console and CLI using application templates. Application source is pulled from remote Git repository and built using source-to-image (s2i) method. You can configure the application with customized application parameters. 
+Applications are created through OpenShift Admin Console and CLI using application templates. If you have a JSON or YAML file that defines a template, you can upload the template to the project using the CLI. This saves the template to the project for repeated use by users with appropriate access to that project. You can add the remote Git repository location to the template using template parameters. This allows you to pull the application source from remote repository and built using source-to-image (s2i) method.
+
+. To create an application using template, upload the template to your current project’s template library with the following command:
+
++
+----
+$ oc create -f <filename> -n <project>
+----
+
+. The template is now available for selection using the web console or the CLI. 
+
+. Login to OpenShift Web Console. In the desired project, click *`Add to Project*` to create the objects from an uploaded template.
+
+. Select the template from the list of templates in your project or from the global template library.
+
+. Edit template parameters and then click *`Create*`. After successful creation of the application, you can view the status of application by clicking *`Pods*` tab or by running the following command:
+
++
+----
+$ oc get pods
+---- 
 
 For more information, see https://docs.openshift.com/enterprise/3.0/dev_guide/templates.html[*Application Templates*]
 
 === Developing Applications 
-Content to be added. 
+==== Injecting Kubernetes services into applications
+
+You can inject Kubernetes services into applications by labeling the pods and use those labels to select the required pods to provide a logincal service. These labels are simple key, value pairs.
+
+===== CDI injection
+
+Fabric8 provides a CDI extension that you can use to inject Kubernetes resources into your applications. To use the cdi extension, first add the dependency to the project's *`pom.xml*`.
+
+----
+<dependency>
+  <groupId>io.fabric8</groupId>
+  <artifactId>fabric8-cdi</artifactId>
+  <version>{$fabric8.version}</version>
+</dependency>
+----
+
+Next step is to identify the field that requires that service and then inject the service by adding a *`@ServiceName*` annotation to it. For example, 
+
+----
+@Inject
+@ServiceName("my-service")
+private String service.
+----
+
+The *`@PortName*` annotation is used to select a specific port by name when multiple ports are defined for a service. 
+
+
+===== Using environment variables as properties
+
+You can use to access a service by using environment variables to expose the fixed IP address and port. These are, *`SERVICE_HOST*` and *`SERVICE_PORT*`. *`SERVICE_HOST*` is the host (IP) address of the service and *`SERVICE_PORT*` is the port of the service. 
