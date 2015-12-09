@@ -23,10 +23,9 @@ There are several major functionality differences:
 +
 [NOTE]
 You can use Karaf shell only for debugging purposes as any runtime change, for example pod restart, scaling, does not persist.
-* Administration views are available through OpenShift Console with Hawtio plugin. 
+* Administration views are available through OpenShift Web Console with Hawtio plugin. 
 * All applications are packaged as Docker images for OpenShift.
 * Kubernetes REST API is used to orchestrate the containers.
-  
 
 == Using Fuse Integration Services 
 You can start using Fuse Integration Services by creating application and deploying it to OpenShift. There are two main ways to create an application in Fuse Integration Services:
@@ -70,7 +69,7 @@ You can select the the example that can best serve your purpose to create an app
 . Use Maven archetype catalog to create a sample project with the required resources. For example, following command will create a sample project: 
 +
 ----
-$ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/nexus/content/repositories/ea/io/fabric8/archetypes/archetypes-catalog/2.2.0.redhat-054/archetypes-catalog-2.2.0.redhat-054-archetype-catalog.xml 
+$ mvn archetype:generate -Darchetype-catalog=archetype-catalog.xml 
 ----
 
 . This will create a maven project with necessary dependencies. Maven properties and plugins that are used to create Docker images are added to the `*pom.xml*`. 
@@ -104,9 +103,9 @@ $ mvn archetype:generate -Darchetype-catalog=http://origin-repository.jboss.org/
 
 | docker:push | Pushes the locally built docker image to the global or a local docker registry. 
 
-| fabric8:json | Generates kubernetes json file for your maven project. 
+| fabric8:json | Generates kubernetes JSON file for your maven project. 
 
-| fabric8:apply | Applies the kubernetes json file to the current Kubernetes environment and namespace. 
+| fabric8:apply | Applies the kubernetes JSON file to the current Kubernetes environment and namespace. 
 
 |=== 
 +
@@ -129,16 +128,16 @@ In this example, we will build it locally by running the command:
 ----
 $ mvn -Pf8-local-deploy 
 ----
-. Open OpenShift Admin console. A pod is created for the newly created application. You can view the status of this pod, deployments and services that the application is creating. 
+. Login to OpenShift Web Console. A pod is created for the newly created application. You can view the status of this pod, deployments and services that the application is creating. 
 
 === Using Application Templates 
 Applications are created through OpenShift Admin Console and CLI using application templates. If you have a JSON or YAML file that defines a template, you can upload the template to the project using the CLI. This saves the template to the project for repeated use by users with appropriate access to that project. You can add the remote Git repository location to the template using template parameters. This allows you to pull the application source from remote repository and built using source-to-image (s2i) method.
 
-. To create an application using template, upload the template to your current project’s template library with the following command:
+. Create an application template using command *`mvn archetype:generate*`. To create an application, upload the template to your current project’s template library with the following command:
 
 +
 ----
-$ oc create -f <filename> -n <project>
+$ oc create -f quickstart-template.json -n <project>
 ----
 
 . The template is now available for selection using the web console or the CLI. 
@@ -153,6 +152,32 @@ $ oc create -f <filename> -n <project>
 ----
 $ oc get pods
 ---- 
++ 
+For example, template parameters for an camel-spring quickstart are:
++
+|===
+
+| APP_NAME | Enter Application name. 
+
+| GIT_REPO | Enter Git Repository location. This is manadatory field. 
+
+| GIT_REF | Default value is master. This is git ref which is used to build application. 
+
+| SERVICE_NAME | Exposed service name 
+
+| BUILDER_VERSION | Builder version
+
+| APP_VERSION | Application version
+
+| MAVEN_ARGS | Default value is package-DskipTests-e. Enter arguments that are passed to mvn in the build.
+
+| MAVEN_ARGS_APPEND | Extra arguments passed to mvn, for example multi-module builds
+
+| ARTIFACT_DIR | MAven build directory
+
+| BUILD_SECRET | generated if empty. The secret needed to trigger a build.
+
+|=== 
 
 For more information, see https://docs.openshift.com/enterprise/3.0/dev_guide/templates.html[*Application Templates*]
 
@@ -173,7 +198,7 @@ Fabric8 provides a CDI extension that you can use to inject Kubernetes resources
 </dependency>
 ----
 
-Next step is to identify the field that requires that service and then inject the service by adding a *`@ServiceName*` annotation to it. For example, 
+Next step is to identify the field that requires the service and then inject the service by adding a *`@ServiceName*` annotation to it. For example, 
 
 ----
 @Inject
