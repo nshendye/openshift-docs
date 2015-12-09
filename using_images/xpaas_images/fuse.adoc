@@ -133,7 +133,7 @@ $ mvn -Pf8-local-deploy
 === Using Application Templates 
 Applications are created through OpenShift Admin Console and CLI using application templates. If you have a JSON or YAML file that defines a template, you can upload the template to the project using the CLI. This saves the template to the project for repeated use by users with appropriate access to that project. You can add the remote Git repository location to the template using template parameters. This allows you to pull the application source from remote repository and built using source-to-image (s2i) method.
 
-. JBoss Fuse Integration Services application templates generated from archetypes depend on s2i builder *`ImageStreams`*, which MUST be created ONCE with the following command:
+. JBoss Fuse Integration Services application templates generated from archetypes depend on s2i builder *`ImageStreams`*, which MUST be created ONCE. The OpenShift installer creates them automatically, but for existing OpenShift installs it can be done with the following command:
 
 +
 ----
