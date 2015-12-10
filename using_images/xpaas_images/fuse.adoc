@@ -133,6 +133,16 @@ $ mvn -Pf8-local-deploy
 === Using Application Templates 
 Applications are created through OpenShift Admin Console and CLI using application templates. If you have a JSON or YAML file that defines a template, you can upload the template to the project using the CLI. This saves the template to the project for repeated use by users with appropriate access to that project. You can add the remote Git repository location to the template using template parameters. This allows you to pull the application source from remote repository and built using source-to-image (s2i) method.
 
+. JBoss Fuse Integration Services application templates generated from archetypes depend on s2i builder *`ImageStreams`*, which MUST be created ONCE. The OpenShift installer creates them automatically, but for existing OpenShift installs it can be done with the following command:
+
++
+----
+$ oc create -n openshift -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
+----
+
++
+The *`ImageStreams`* may be created in a namespace other than *`openshift`* by changing it in the command and corresponding template parameter *`IMAGE_STREAM_NAMESPACE`* when creating applications.
+
 . Create an application template using command *`mvn archetype:generate*`. To create an application, upload the template to your current project’s template library with the following command:
 
 +
@@ -153,7 +163,7 @@ $ oc create -f quickstart-template.json -n <project>
 $ oc get pods
 ---- 
 + 
-For example, template parameters for an camel-spring quickstart are:
+For example, template parameters for a camel-spring quickstart are:
 +
 |===
 
@@ -169,11 +179,13 @@ For example, template parameters for an camel-spring quickstart are:
 
 | APP_VERSION | Application version
 
-| MAVEN_ARGS | Default value is package-DskipTests-e. Enter arguments that are passed to mvn in the build.
+| MAVEN_ARGS | Default value is *`package -DskipTests -e`*. Enter arguments that are passed to mvn in the build.
 
 | MAVEN_ARGS_APPEND | Extra arguments passed to mvn, for example multi-module builds
 
-| ARTIFACT_DIR | MAven build directory
+| ARTIFACT_DIR | Maven build directory
+
+| IMAGE_STREAM_NAMESPACE | Namespace in which the Fuse ImageStreams are installed.
 
 | BUILD_SECRET | generated if empty. The secret needed to trigger a build.
 
