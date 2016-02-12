@@ -72,13 +72,17 @@ Begin by selecting the archetype which matches the type of application you would
 * JBoss Fuse repository: `https://repo.fusesource.com/nexus/content/groups/public/`
 * RedHat GA repository: `https://maven.repository.redhat.com/ga`
 +
-You can then use the Maven archetype catalog to create a sample project with the required resources. For example, the following command will create a sample project:
+You can then use the Maven archetype catalog to create a sample project with the required resources. The command to create a sample project is:
 +
 ----
 $ mvn archetype:generate \
   -DarchetypeCatalog=https://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml \
-  -Dfilter=io.fabric8.archetypes:
+  -DarchetypeGroupId=io.fabric8.archetypes \
+  -DarchetypeVersion=2.2.0.redhat-079 \
+  -DarchetypeArtifactId=[archetype-name]
 ----
+[NOTE]
+Replace [archetype-name] with the name of the archetype that you want to use. For example, karaf-camel-log-archetype will create a new Camel log example.
 
 . This will create a maven project with all required dependencies. Maven properties and plug-ins that are used to create Docker images are added to the *_pom.xml_* file.
 
