@@ -30,12 +30,12 @@ Additional details on technical differences and support scope are documented in 
 
 
 == Using Fuse Integration Services
-You can start using Fuse Integration Services by creating application and deploying it to OpenShift. There are two ways to create an application in Fuse Integration Services:
+You can start using Fuse Integration Services by creating application and deploying it to OpenShift. You can use Application Development workflows to to create an application. These are: 
 
-* Using Maven Archetypes
-* Using Application Templates
+* Fabric8 Maven Workflow
+* OpenShift Source-to-Image (s2i) Workflow
 
-=== Using Maven Archetypes
+=== Fabric8 Maven Workflow
 Creates a new project based off a Maven application template created through Archetype catalog. This catalog provides examples of Java and Karaf projects and supports S2I and Maven deployment workflows.
 
 ==== Maven Archetypes Catalog
@@ -65,7 +65,7 @@ The Maven Archetype catalog includes the following examples:
 
 Begin by selecting the archetype which matches the type of application you would like to create.
 
-==== Simple Workflow to Create an Application from Maven Archetype Catalog
+==== Simple steps to create an application from Maven Archetype Catalog
 
 . Use the Maven archetype catalog to create a sample project with the required resources. In order to use archetypes it is important to configure the Maven repositories which holds the archetypes and artifacts you may need:
 
@@ -178,7 +178,7 @@ Plug-ins `docker-maven-plugin` and `fabric8-maven-plugin` are responsible for cr
 |===
 
 [[fuse-using-application-templates]]
-=== Using Application Templates
+=== OpenShift Source-to-Image (s2i) Workflow
 Applications are created through OpenShift Admin Console and CLI using application templates. If you have a JSON or YAML file that defines a template, you can upload the template to the project using the CLI. This saves the template to the project for repeated use by users with appropriate access to that project. You can add the remote Git repository location to the template using template parameters. This allows you to pull the application source from remote repository and built using source-to-image (S2I) method.
 
 JBoss Fuse Integration Services application templates depend on S2I builder `*ImageStreams*`, which MUST be created ONCE. The OpenShift installer creates them automatically. For users existing OpenShift setups, it can be achieved with the following command:
