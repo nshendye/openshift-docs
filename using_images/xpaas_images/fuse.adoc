@@ -26,7 +26,8 @@ There are several major functionality differences:
 * Messaging services are created and managed using the A-MQ xPaaS images for OpenShift and not included directly within Fuse.  Fuse Integration Services provides an enhanced version of the camel-amq component to allow for seamless connectivity to messaging services in OpenShift through Kubernetes.
 * Live updates to running Karaf instances using the Karaf shell is strongly discouraged as updates will not be preserved if an application container is restarted or scaled up.  This is a fundamental tenet of immutable architecture and essential to achieving scalability and flexibility within OpenShift.
 
-Additional details on technical differences and support scope are documented in an associated KCS article.
+Additional details on technical differences and support scope are documented in an associated https://access.redhat.com/articles/2112371[KCS article]:
+ .
 
 
 == Using Fuse Integration Services
